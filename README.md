@@ -3,7 +3,7 @@
 This docker image combines WAL-E and Postgres 9.3 to create a Docker image
 capable of restoring from a WAL-E backup. Ths can be used for several things:
 
-* Developers can use it to create local replicas from your backups
+* Developers can use it to create local replicas from backups
 
 * It can be used to test the integrity of your backups
 
@@ -12,7 +12,7 @@ capable of restoring from a WAL-E backup. Ths can be used for several things:
 ## Running the image
 
 First create a file named `env` and put the following environment variables
-inside:
+inside one per line as `KEY=VALUE`:
 
 * `AWS_ACESS_KEY_ID`
 
@@ -20,7 +20,7 @@ inside:
 
 * `WALE_S3_PREFIX`
 
-Then simply run the continer with:
+Then simply run the container with:
 
     docker run -p 5432:5432 --env-file=env smarthall/docker-wal-e-replica
 
