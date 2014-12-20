@@ -1,0 +1,10 @@
+#!/bin/bash
+
+cmd="$1"
+
+# Grab the config to environment variables
+source /etc/sysconfig/wal-e
+
+# Run WAL-E
+exec /usr/bin/wal-e $@
+

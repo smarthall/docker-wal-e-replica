@@ -1,8 +1,40 @@
 #!/bin/bash
 
-INITSCRIPT=/etc/init.d/postgresql-9.3
-PGHOME=/var/lib/pgsql/
-PGDATA=${PGHOME}/9.3/data
+PGHOME=/var/lib/pgsql/9.3
+PGDATA=${PGHOME}/data
+PGCONF=${PGDATA}/postgresql.conf
+PGHBA=${PGDATA}/pg_hba.conf
+PGRECONF=${PGDATA}/recovery.conf
+PGSTARTLOG=${PGHOME}/pgstartup.log
+PGLOGDIR=${PGDATA}/pg_log
+WAL_E_WRAPPER=/usr/local/bin/wal-e-wrapper
 
-echo "Image not yet functional"
+echo 'Setting up...'
+
+# Create a WAL-E config file
+WALEVARS="AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY WALE_S3_PREFIX"
+for var in ${WALEVARS}; do
+    echo "export ${var}=$(printenv ${var})" >> /etc/sysconfig/wal-e
+done
+
+# Configure postgres to trust every user
+cat >${PGHBA} <<EOF
+host    all             all             0.0.0.0/0            trust
+EOF
+
+if [ ! -f ${PGCONF} ]; then
+    # Recover a base backup
+    echo 'Restoring latest base backup...'
+    ${WAL_E_WRAPPER} backup-fetch ${PGHOME} LATEST
+fi
+
+echo 'Writing a recovery config...'
+cat >${PGRECONF} <<EOF
+restore_command = '/usr/local/bin/wal-e-wrapper wal-fetch %f %p'
+EOF
+
+echo 'Starting postgres...'
+rm ${PGSTARTLOG}
+rm ${PGLOGDIR}/*.log
+exec runuser -l postgres -c '/usr/pgsql-9.3/bin/postmaster -p 5432 -D /var/lib/pgsql/9.3/data'
 
