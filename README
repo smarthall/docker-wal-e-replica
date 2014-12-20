@@ -1,0 +1,6 @@
+# Postgres WAL-E Replica
+
+This machines uses WAL-E to allow you to build a replica of any machine that
+is backed up with WAL-E. This means your developers can easily build a replica
+of your production environment if it is replicated using WAL-E.
+

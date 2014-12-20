@@ -1,0 +1,8 @@
+#!/bin/bash
+
+INITSCRIPT=/etc/init.d/postgresql-9.3
+PGHOME=/var/lib/pgsql/
+PGDATA=${PGHOME}/9.3/data
+
+echo "Image not yet functional"
+
