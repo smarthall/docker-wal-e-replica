@@ -14,7 +14,7 @@ capable of restoring from a WAL-E backup. Ths can be used for several things:
 First create a file named `env` and put the following environment variables
 inside one per line as `KEY=VALUE`:
 
-* `AWS_ACESS_KEY_ID`
+* `AWS_ACCESS_KEY_ID`
 
 * `AWS_SECRET_ACCESS_KEY`
 
